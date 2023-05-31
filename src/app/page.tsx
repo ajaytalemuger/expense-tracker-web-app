@@ -1,3 +1,15 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 export default function Home() {
-  return <h1 className="text-3xl">Main page</h1>;
+
+  const { push } = useRouter();
+
+  useEffect(() => {
+    push("/login");
+  }, [push]);
+
+  return <p></p>;
 }

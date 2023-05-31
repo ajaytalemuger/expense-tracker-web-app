@@ -1,0 +1,35 @@
+import { NextResponse } from "next/server";
+import { create } from "../../../db/DALs/usersDAL";
+import { StatusCodes } from "http-status-codes";
+import { createToken } from "@/utils/auth";
+import { COOKIE_KEY } from "@/utils/constants";
+
+export async function POST(request: Request) {
+  try {
+    const reqBody = await request.json();
+    const createdUser = await create(reqBody);
+    const token = createToken(createdUser);
+
+    return NextResponse.json(
+      {
+        success: true,
+        createdUser: {
+          name: createdUser.name,
+          email: createdUser.email,
+          token,
+        },
+      },
+      {
+        headers: {
+          "Set-Cookie": `${COOKIE_KEY}=${token}`,
+        },
+      }
+    );
+  } catch (error) {
+    console.log("Error while creating user", error);
+    return NextResponse.json(
+      { success: false },
+      { status: StatusCodes.INTERNAL_SERVER_ERROR }
+    );
+  }
+}
