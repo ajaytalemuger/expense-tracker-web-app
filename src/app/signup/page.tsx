@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useMemo } from "react";
 import * as EmailValidator from "email-validator";
 import { useRouter } from "next/navigation";
+import { StatusCodes } from "http-status-codes";
 
 type SignupDetails = {
   name: string;
@@ -24,11 +25,14 @@ type UserDetails = {
 type CreationResponse = {
   success: boolean;
   createdUser: UserDetails | undefined;
+  status: number | undefined;
 };
 
-enum ValidationErrors {
+enum SignupErrors {
   "PASSWORD_MISMATCH" = "Both password and confirm password must be same",
   "INVALID_EMAIL" = "Invalid email",
+  "EMAIL_ALREADY_EXISTS" = "Email already exists",
+  "SIGNUP_ERROR" = "Error while signing up, try again later",
 }
 
 type State = {
@@ -36,7 +40,7 @@ type State = {
   email: string;
   password: string;
   confirmPassword: string;
-  validationErrors: ValidationErrors[];
+  signupErrors: SignupErrors[];
 };
 
 export default function SignupPage() {
@@ -45,7 +49,7 @@ export default function SignupPage() {
     email: "",
     password: "",
     confirmPassword: "",
-    validationErrors: [],
+    signupErrors: [],
   });
 
   const router = useRouter();
@@ -61,61 +65,64 @@ export default function SignupPage() {
     };
 
     // validate inputs
-    const validationErrors = validateSignupDetails(signupDetails);
+    const signupErrors = validateSignupDetails(signupDetails);
 
-    if (validationErrors.length) {
+    if (signupErrors.length) {
       setState({
-        validationErrors,
+        signupErrors,
       });
       return;
     }
 
     // create user
-    const creationResponse = await createUser(signupDetails);
+    const res = await createUser(signupDetails);
+    const creationResponse = await res?.json();
 
-    if (creationResponse.success) {
+    if (creationResponse?.success) {
       // redirect to dashboard
       router.push("/dashboard");
     } else {
-      // else show error message
+      // else show error message based on response status
+      if (res?.status === StatusCodes.BAD_REQUEST) {
+        setState({
+          signupErrors: [SignupErrors.EMAIL_ALREADY_EXISTS],
+        });
+      } else {
+        setState({
+          signupErrors: [SignupErrors.SIGNUP_ERROR],
+        });
+      }
     }
   };
 
   const validateSignupDetails = (signupDetails: SignupDetails) => {
-    let validationErrors = [];
+    let signupErrors = [];
 
     if (signupDetails.password !== signupDetails.confirmPassword) {
-      validationErrors.push(ValidationErrors.PASSWORD_MISMATCH);
+      signupErrors.push(SignupErrors.PASSWORD_MISMATCH);
     }
 
     if (!EmailValidator.validate(signupDetails.email)) {
-      validationErrors.push(ValidationErrors.INVALID_EMAIL);
+      signupErrors.push(SignupErrors.INVALID_EMAIL);
     }
 
-    return validationErrors;
+    return signupErrors;
   };
 
   const createUser = async (signupDetails: SignupDetails) => {
-    let response: CreationResponse = {
-      success: false,
-      createdUser: undefined,
-    };
-
     try {
       const user = {
         name: signupDetails.name,
         email: signupDetails.email,
         pwd: signupDetails.password,
       };
-      const res = await fetch("/api/signup", {
+      return fetch("/api/signup", {
         method: "POST",
         body: JSON.stringify(user),
       });
-      response = await res.json();
     } catch (error) {
       console.log("error while creating user");
     }
-    return response;
   };
 
   const onInputChange = (field: any, value: String) => {
@@ -123,7 +130,7 @@ export default function SignupPage() {
       return {
         ...state,
         [field]: value,
-        validationErrors: [],
+        signupErrors: [],
       };
     });
   };
@@ -138,7 +145,7 @@ export default function SignupPage() {
   }, [state]);
 
   const divHeightValue = useMemo(() => {
-    return `${375 + state.validationErrors.length * 5}px`;
+    return `${375 + state.signupErrors.length * 5}px`;
   }, [state]);
 
   return (
@@ -160,15 +167,20 @@ export default function SignupPage() {
             type="text"
             id="email"
             placeholder="Email"
-            error={state.validationErrors.includes(
-              ValidationErrors.INVALID_EMAIL
-            )}
+            error={
+              state.signupErrors.includes(SignupErrors.INVALID_EMAIL) ||
+              state.signupErrors.includes(SignupErrors.EMAIL_ALREADY_EXISTS)
+            }
             value={state.email}
             onChange={(value: String) => onInputChange("email", value)}
           />
-          {state.validationErrors.includes(ValidationErrors.INVALID_EMAIL) && (
+          {state.signupErrors.includes(SignupErrors.INVALID_EMAIL) && (
+            <p className="text-red-500 mt-3">{SignupErrors.INVALID_EMAIL}</p>
+          )}
+
+          {state.signupErrors.includes(SignupErrors.EMAIL_ALREADY_EXISTS) && (
             <p className="text-red-500 mt-3">
-              {ValidationErrors.INVALID_EMAIL}
+              {SignupErrors.EMAIL_ALREADY_EXISTS}
             </p>
           )}
 
@@ -184,19 +196,21 @@ export default function SignupPage() {
             type="password"
             id="confirmPassword"
             placeholder="Confirm Password"
-            error={state.validationErrors.includes(
-              ValidationErrors.PASSWORD_MISMATCH
-            )}
+            error={state.signupErrors.includes(SignupErrors.PASSWORD_MISMATCH)}
             value={state.confirmPassword}
             onChange={(value: String) =>
               onInputChange("confirmPassword", value)
             }
           />
-          {state.validationErrors.includes(
-            ValidationErrors.PASSWORD_MISMATCH
-          ) && (
+          {state.signupErrors.includes(SignupErrors.PASSWORD_MISMATCH) && (
             <p className="text-red-500 mt-3">
-              {ValidationErrors.PASSWORD_MISMATCH}
+              {SignupErrors.PASSWORD_MISMATCH}
+            </p>
+          )}
+
+          {state.signupErrors.includes(SignupErrors.SIGNUP_ERROR) && (
+            <p className="text-red-500 mt-3">
+              {SignupErrors.SIGNUP_ERROR}
             </p>
           )}
 

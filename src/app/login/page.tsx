@@ -11,7 +11,7 @@ import { useMemo } from "react";
 enum LoginErrors {
   "INVALID_CRED" = "Either user does not exist or invalid password",
   "LOGIN_ERROR" = "Error while logging in, try again later",
-}
+};
 
 type State = {
   email: string;

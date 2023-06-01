@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { create } from "../../../db/DALs/usersDAL";
+import { create, getByEmail } from "../../../db/DALs/usersDAL";
 import { StatusCodes } from "http-status-codes";
 import { createToken } from "@/utils/auth";
 import { COOKIE_KEY } from "@/utils/constants";
@@ -7,24 +7,41 @@ import { COOKIE_KEY } from "@/utils/constants";
 export async function POST(request: Request) {
   try {
     const reqBody = await request.json();
-    const createdUser = await create(reqBody);
-    const token = createToken(createdUser);
 
-    return NextResponse.json(
-      {
-        success: true,
-        createdUser: {
-          name: createdUser.name,
-          email: createdUser.email,
-          token,
+    // check if email already exists
+    const user = await getByEmail(reqBody.email);
+
+    if (user) {
+      // if user exists return error status
+      return NextResponse.json(
+        {
+          success: false,
+          error: "User already exists",
         },
-      },
-      {
-        headers: {
-          "Set-Cookie": `${COOKIE_KEY}=${token}`,
+        {
+          status: StatusCodes.BAD_REQUEST,
+        }
+      );
+    } else {
+      const createdUser = await create(reqBody);
+      const token = createToken(createdUser);
+
+      return NextResponse.json(
+        {
+          success: true,
+          createdUser: {
+            name: createdUser.name,
+            email: createdUser.email,
+            token,
+          },
         },
-      }
-    );
+        {
+          headers: {
+            "Set-Cookie": `${COOKIE_KEY}=${token}`,
+          },
+        }
+      );
+    }
   } catch (error) {
     console.log("Error while creating user", error);
     return NextResponse.json(
