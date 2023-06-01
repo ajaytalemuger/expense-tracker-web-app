@@ -7,4 +7,4 @@ const userSchema = new Schema({
     pwd: String,
 });
 
-export default mongoose.model("users", userSchema);
+export default mongoose.models.users || mongoose.model("users", userSchema);

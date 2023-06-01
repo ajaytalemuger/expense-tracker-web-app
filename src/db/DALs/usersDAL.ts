@@ -16,3 +16,8 @@ export const create = async (user: User) => {
     return createdUser;
 };
 
+export const getByEmail = async (email: string) => {
+    await dbConnect();
+    return Users.findOne({ email });
+};
+
