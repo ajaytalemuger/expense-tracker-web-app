@@ -1,4 +1,4 @@
-import { hashPassword } from "@/utils/auth";
+import { hashPassword } from "@/utils/authPwd";
 import dbConnect from "../dbConnect";
 import Users from "../models/users";
 

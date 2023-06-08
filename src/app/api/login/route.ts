@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { StatusCodes } from "http-status-codes";
 import { getByEmail } from "@/db/DALs/usersDAL";
-import { createToken, verifyPassword } from "@/utils/auth";
+import { verifyPassword } from "@/utils/authPwd";
 import { COOKIE_KEY } from "@/utils/constants";
+import { createToken } from "@/utils/authToken";
 
 export async function POST(request: Request) {
   try {
@@ -16,7 +17,7 @@ export async function POST(request: Request) {
         { status: StatusCodes.UNAUTHORIZED }
       );
     } else {
-      const token = createToken(user);
+      const token = await createToken(user);
       return NextResponse.json(
         {
           success: true,
@@ -28,7 +29,7 @@ export async function POST(request: Request) {
         },
         {
           headers: {
-            "Set-Cookie": `${COOKIE_KEY}=${token}`,
+            "Set-Cookie": `${COOKIE_KEY}=${token}; Path=/`,
           },
         }
       );

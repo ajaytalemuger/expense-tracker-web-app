@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { create, getByEmail } from "../../../db/DALs/usersDAL";
 import { StatusCodes } from "http-status-codes";
-import { createToken } from "@/utils/auth";
 import { COOKIE_KEY } from "@/utils/constants";
+import { createToken } from "@/utils/authToken";
 
 export async function POST(request: Request) {
   try {
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       );
     } else {
       const createdUser = await create(reqBody);
-      const token = createToken(createdUser);
+      const token = await createToken(createdUser);
 
       return NextResponse.json(
         {
