@@ -1,7 +1,8 @@
 import * as jose from "jose";
 
 export const createToken = async (user: any): Promise<string> => {
-  const userTokenDetails = { name: user.name, email: user.email };
+
+  const userTokenDetails = { _id: user._id.toString(), name: user.name, email: user.email };
 
   if (!process.env.TOKEN_PRIVATE_KEY) {
     throw new Error("token private key not provided");
