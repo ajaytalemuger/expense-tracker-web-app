@@ -2,6 +2,7 @@
 
 import Button from "@/components/Button";
 import FormInput from "@/components/FormInput";
+import useUserData from "@/hooks/useUserData";
 import { useSetState } from "ahooks";
 import { StatusCodes } from "http-status-codes";
 import Link from "next/link";
@@ -33,6 +34,8 @@ export default function LoginPage() {
 
   const router = useRouter();
 
+  const { setUserData } = useUserData();
+
   const onLoginClick = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
@@ -54,8 +57,19 @@ export default function LoginPage() {
       const response = await res.json();
 
       if (response.success) {
-        // if login successful redirect to dashboard page
+
+        const { user } = response;
+
+        // set user data in storage
+        setUserData({
+          userId: user._id,
+          userEmail: user.email,
+          userName: user.name
+        })
+
+        // redirect to dashboard page
         router.push("/dashboard");
+        
       } else {
         // else show error message based on response status
         if (res.status === StatusCodes.UNAUTHORIZED) {

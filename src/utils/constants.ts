@@ -4,3 +4,5 @@ export enum TRANSACTION_TYPES {
 };
 
 export const COOKIE_KEY = "expense-tracker-app";
+
+export const USER_DATA_LOCAL_STORAGE_KEY = "expense-tracker-app-user-data"
