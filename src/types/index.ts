@@ -25,3 +25,25 @@ export type UserDataState = {
     userEmail: string,
     userName: string,
 };
+
+export type ExportModalCreationModalProps = {
+    open: boolean,
+    onClose: MouseEventHandler<HTMLButtonElement>,
+    onCreate: Function,
+};
+
+export type ExpenseGroupState = {
+    name: string,
+    description: string,
+    otherUsers: Array<string>,
+};
+
+export type FormatInputProps = {
+    id: string,
+    placeholder: string,
+    type: string,
+    value: any,
+    onChange: Function,
+    error?: boolean,
+    className?: string,
+};
