@@ -7,7 +7,7 @@ import { getCookie } from "cookies-next";
 import { COOKIE_KEY } from "@/utils/constants";
 import ModalPopup from "./ModalPopop";
 
-export default function ExportModalCreationModal({
+export default function ExpenseGroupCreationModal({
   open = false,
   onClose,
   onCreate,
@@ -46,8 +46,6 @@ export default function ExportModalCreationModal({
     };
 
     const creationResp = await createExpenseGroup(newExpenseGroup);
-
-    console.log("creationResp", creationResp);
 
     if (creationResp.success && creationResp.createdExpenseGroup) {
       onCreate(creationResp.createdExpenseGroup);
