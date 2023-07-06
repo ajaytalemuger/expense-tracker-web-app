@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { ExpenseGroupState, ExportModalCreationModalProps } from "@/types";
-import FormInput from "./FormInput";
-import Button from "./Button";
+import FormInput from "../common/FormInput";
+import Button from "../common/Button";
 import useUserData from "@/hooks/useUserData";
 import { getCookie } from "cookies-next";
 import { COOKIE_KEY } from "@/utils/constants";
-import ModalPopup from "./ModalPopop";
+import ModalPopup from "../common/ModalPopop";
 
 export default function ExpenseGroupCreationModal({
   open = false,

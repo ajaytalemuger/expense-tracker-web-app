@@ -1,8 +1,8 @@
 "use client";
 
-import Button from "@/components/Button";
-import FormInput from "@/components/FormInput";
-import Loader from "@/components/Loader";
+import Button from "@/components/common/Button";
+import FormInput from "@/components/common/FormInput";
+import Loader from "@/components/common/Loader";
 import useUserData from "@/hooks/useUserData";
 import { useSetState } from "ahooks";
 import { StatusCodes } from "http-status-codes";

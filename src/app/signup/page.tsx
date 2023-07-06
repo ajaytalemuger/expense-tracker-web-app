@@ -1,7 +1,7 @@
 "use client";
 
-import Button from "@/components/Button";
-import FormInput from "@/components/FormInput";
+import Button from "@/components/common/Button";
+import FormInput from "@/components/common/FormInput";
 import { useSetState } from "ahooks";
 import Link from "next/link";
 import { useMemo } from "react";

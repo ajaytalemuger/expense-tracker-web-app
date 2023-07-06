@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ExpenseGroupCard from "@/components/ExpenseGroupCard";
+import ExpenseGroupCard from "@/components/expenseGroups/ExpenseGroupCard";
 import { getCookie } from "cookies-next";
 import { COOKIE_KEY } from "@/utils/constants";
 import { ExpenseGroupClient } from "@/types";
 import useSWR from "swr";
 import useUserData from "@/hooks/useUserData";
-import ExportModalCreationModal from "@/components/ExpenseGroupCreationModal";
-import Loader from "@/components/Loader";
+import ExportModalCreationModal from "@/components/expenseGroups/ExpenseGroupCreationModal";
+import Loader from "@/components/common/Loader";
 
 export default function DashboardPage() {
 

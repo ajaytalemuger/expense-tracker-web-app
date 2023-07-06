@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import settingsIcon from "../../public/svgs/settings.svg";
-import logoutIcon from "../../public/svgs/logout.svg";
+import settingsIcon from "../../../public/svgs/settings.svg";
+import logoutIcon from "../../../public/svgs/logout.svg";
 import { useRouter } from "next/navigation";
 import useUserData from "@/hooks/useUserData";
 import { deleteCookie } from 'cookies-next';
