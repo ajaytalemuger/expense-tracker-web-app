@@ -2,6 +2,7 @@
 
 import Button from "@/components/Button";
 import FormInput from "@/components/FormInput";
+import Loader from "@/components/Loader";
 import useUserData from "@/hooks/useUserData";
 import { useSetState } from "ahooks";
 import { StatusCodes } from "http-status-codes";
@@ -18,6 +19,7 @@ type State = {
   email: string;
   password: string;
   loginErrors: LoginErrors[];
+  loading: boolean
 };
 
 type LoginCreds = {
@@ -30,6 +32,7 @@ export default function LoginPage() {
     email: "",
     password: "",
     loginErrors: [],
+    loading: false,
   });
 
   const router = useRouter();
@@ -48,6 +51,11 @@ export default function LoginPage() {
   };
 
   const authenticateUser = async (loginCreds: LoginCreds) => {
+
+    setState({
+      loading: true
+    });
+
     try {
       const res = await fetch("/api/login", {
         method: "POST",
@@ -88,6 +96,10 @@ export default function LoginPage() {
       setState({
         loginErrors: [LoginErrors.LOGIN_ERROR]
       });
+    } finally {
+      setState({
+        loading: false
+      });
     }
   };
 
@@ -110,50 +122,53 @@ export default function LoginPage() {
   }, [state]);
 
   return (
-    <div className="flex h-screen justify-center items-center">
-      <div className={`p-3 bg-white rounded-xl shadow-xl w-[375px] m-auto h-[${divHeightValue}px]`}>
-        <p className="text-md mb-5 text-center text-xl">Login</p>
-        <form>
-          <FormInput
-            type="text"
-            id="email"
-            placeholder="Email"
-            value={state.email}
-            onChange={(value: String) => onInputChange("email", value)}
-          />
+    <>
+      { state.loading && <Loader /> }
+      <div className="flex h-screen justify-center items-center">
+        <div className={`p-3 bg-white rounded-xl shadow-xl w-[375px] m-auto h-[${divHeightValue}px]`}>
+          <p className="text-md mb-5 text-center text-xl">Login</p>
+          <form>
+            <FormInput
+              type="text"
+              id="email"
+              placeholder="Email"
+              value={state.email}
+              onChange={(value: String) => onInputChange("email", value)}
+            />
 
-          <FormInput
-            type="password"
-            id="password"
-            placeholder="Password"
-            value={state.password}
-            onChange={(value: String) => onInputChange("password", value)}
-          />
+            <FormInput
+              type="password"
+              id="password"
+              placeholder="Password"
+              value={state.password}
+              onChange={(value: String) => onInputChange("password", value)}
+            />
 
-          {!!state.loginErrors.length && (
-            <p className="text-red-500 mt-3">
-              {state.loginErrors[0]}
-            </p>
-          )}
+            {!!state.loginErrors.length && (
+              <p className="text-red-500 mt-3">
+                {state.loginErrors[0]}
+              </p>
+            )}
 
-          <div className="text-center">
-            <Button
-              className="mb-5 mt-5"
-              onClick={onLoginClick}
-              disabled={disableConfirmBtn}
-            >
-              Confirm
-            </Button>
+            <div className="text-center">
+              <Button
+                className="mb-5 mt-5"
+                onClick={onLoginClick}
+                disabled={disableConfirmBtn}
+              >
+                Confirm
+              </Button>
+            </div>
+          </form>
+          <div></div>
+          <div className="text-md mb-5 text-center text-base">
+            Not yet signed up ?{" "}
+            <Link className="text-[#6ca0f5] hover:underline" href="/signup">
+              Sign up
+            </Link>
           </div>
-        </form>
-        <div></div>
-        <div className="text-md mb-5 text-center text-base">
-          Not yet signed up ?{" "}
-          <Link className="text-[#6ca0f5] hover:underline" href="/signup">
-            Sign up
-          </Link>
         </div>
       </div>
-    </div>
+    </>
   );
 }

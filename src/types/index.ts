@@ -47,3 +47,10 @@ export type FormatInputProps = {
     error?: boolean,
     className?: string,
 };
+
+export type ModalPopupInputProps = {
+    open: boolean,
+    onClose: MouseEventHandler<HTMLButtonElement>,
+    headerText: string,
+    content: any
+}

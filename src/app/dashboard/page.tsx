@@ -8,6 +8,7 @@ import { ExpenseGroupClient } from "@/types";
 import useSWR from "swr";
 import useUserData from "@/hooks/useUserData";
 import ExportModalCreationModal from "@/components/ExpenseGroupCreationModal";
+import Loader from "@/components/Loader";
 
 export default function DashboardPage() {
 
@@ -83,6 +84,7 @@ export default function DashboardPage() {
 
   return (
     <>
+      {isLoading && <Loader text="Loading..."/>}
       <div className="ml-10">
         <div className="flex flex-row gap-10 p-5 items-center">
           <button
