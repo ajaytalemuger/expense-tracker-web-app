@@ -13,6 +13,8 @@ const expenseGroupSchema = new Schema(
       },
     ],
     createdBy: { type: mongoose.Types.ObjectId, required: true },
+
+    updatedBy: { type: mongoose.Types.ObjectId, required: false },
   },
   { timestamps: true }
 );

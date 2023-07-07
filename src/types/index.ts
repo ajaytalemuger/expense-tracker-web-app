@@ -26,10 +26,17 @@ export type UserDataState = {
     userName: string,
 };
 
-export type ExportModalCreationModalProps = {
+export type ExpenseGroupCreationModalProps = {
     open: boolean,
     onClose: MouseEventHandler<HTMLButtonElement>,
     onCreate: Function,
+};
+
+export type ExpenseGroupEditModalProps = {
+    open: boolean,
+    onClose: MouseEventHandler<HTMLButtonElement>,
+    onEdit: Function,
+    expenseGroup: ExpenseGroupClient,
 };
 
 export type ExpenseGroupState = {

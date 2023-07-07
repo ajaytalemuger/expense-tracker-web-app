@@ -7,7 +7,9 @@ type ExpenseGroup = {
     admin: string,
     name: string,
     description: string,
-    otherUsers: Array<string>
+    otherUsers: Array<string>,
+    createdBy?: string,
+    updatedBy?: string,
 };
 
 export const create = async (expenseGroup: ExpenseGroup) => {
@@ -32,3 +34,13 @@ export const getByUserId = async (userId: string) => {
         ]
     });
 };
+
+export const getById = async (expenseGroupId: string) => {
+    await dbConnect();
+    return ExpenseGroups.findOne({ _id: expenseGroupId });
+};
+
+export const updateById = async (expenseGroupId: string, expenseGroup: ExpenseGroup) => {
+    await dbConnect();
+    return ExpenseGroups.findOneAndUpdate({ _id: expenseGroupId }, { ...expenseGroup }, { returnDocument: "after" });
+}

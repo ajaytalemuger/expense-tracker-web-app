@@ -1,32 +1,45 @@
 import { useEffect, useMemo, useState } from "react";
-import { ExpenseGroupState, ExpenseGroupCreationModalProps } from "@/types";
+import { ExpenseGroupState, ExpenseGroupEditModalProps } from "@/types";
 import FormInput from "../common/FormInput";
 import Button from "../common/Button";
-import useUserData from "@/hooks/useUserData";
 import { getCookie } from "cookies-next";
 import { COOKIE_KEY } from "@/utils/constants";
 import ModalPopup from "../common/ModalPopop";
 
-export default function ExpenseGroupCreationModal({
+export default function ExpenseGroupEditModal({
   open = false,
   onClose,
-  onCreate,
-}: ExpenseGroupCreationModalProps) {
+  onEdit,
+  expenseGroup
+}: ExpenseGroupEditModalProps) {
+
   const [state, setState] = useState<ExpenseGroupState>({
     name: "",
     description: "",
     otherUsers: [],
   });
 
-  const { userData } = useUserData();
+  const expenseGroupId = expenseGroup?._id;
 
   useEffect(() => {
-    setState({
+
+    let initalState: ExpenseGroupState = {
       name: "",
       description: "",
-      otherUsers: [],
+      otherUsers: []
+    };
+
+    if (expenseGroup)
+    {
+      initalState.name = expenseGroup.name;
+      initalState.description = expenseGroup.description;
+      initalState.otherUsers = [ ...expenseGroup.otherUsers ];
+    }
+    
+    setState({
+      ...initalState
     });
-  }, [open]);
+  }, [expenseGroup]);
 
   const onInputChange = (field: any, value: String) => {
     setState((state) => {
@@ -37,25 +50,24 @@ export default function ExpenseGroupCreationModal({
     });
   };
 
-  const handleCreateClick = async (e: { preventDefault: () => void }) => {
+  const handleEditClick = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    let newExpenseGroup = {
+    let modifiedExpenseGroup = {
       ...state,
-      admin: userData.userId,
     };
 
-    const creationResp = await createExpenseGroup(newExpenseGroup);
+    const editResp = await editExpenseGroup(expenseGroupId, modifiedExpenseGroup);
 
-    if (creationResp.success && creationResp.createdExpenseGroup) {
-      onCreate(creationResp.createdExpenseGroup);
+    if (editResp.success && editResp.updatedExpenseGroup) {
+        onEdit(editResp.updatedExpenseGroup);
     }
   };
 
-  const createExpenseGroup = async (expenseGroup: any) => {
+  const editExpenseGroup = async (expenseGroupId: string, expenseGroup: any) => {
     try {
-      const resp = await fetch("/api/expenseGroups", {
-        method: "POST",
+      const resp = await fetch(`/api/expenseGroups/${expenseGroupId}`, {
+        method: "PUT",
         body: JSON.stringify(expenseGroup),
         headers: {
           Authorization: `Bearer ${getCookie(COOKIE_KEY)}`,
@@ -76,7 +88,7 @@ export default function ExpenseGroupCreationModal({
     <ModalPopup
       open={open}
       onClose={onClose}
-      headerText="Create Expense Group"
+      headerText="Edit Expense Group"
       content={
         <div className="mt-7">
           <form>
@@ -100,10 +112,10 @@ export default function ExpenseGroupCreationModal({
 
             <Button
               className="mb-5 mt-5 mr-5 float-right"
-              onClick={handleCreateClick}
+              onClick={handleEditClick}
               disabled={disableBtn}
             >
-              Create
+              Edit
             </Button>
           </form>
         </div>

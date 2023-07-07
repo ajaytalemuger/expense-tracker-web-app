@@ -5,6 +5,7 @@ import { verifyToken } from "./utils/authToken";
 import { StatusCodes } from "http-status-codes";
 
 export async function middleware(request: NextRequest) {
+
   if (request.nextUrl.pathname.startsWith("/dashboard")) {
     return await validateUserTokenInCookies(request);
   }
@@ -89,5 +90,9 @@ const validateBearerToken = async (request: NextRequest) => {
 };
 
 export const config = {
-  matcher: ["/dashboard", "/api/expenseGroups"],
+  matcher: [
+    "/dashboard", 
+    "/api/expenseGroups/",
+    "/api/expenseGroups/:expenseGroupId*"
+  ],
 };
