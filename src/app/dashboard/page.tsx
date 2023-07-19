@@ -10,8 +10,11 @@ import useUserData from "@/hooks/useUserData";
 import ExpenseGroupCreationModal from "@/components/expenseGroups/ExpenseGroupCreationModal";
 import Loader from "@/components/common/Loader";
 import ExpenseGroupEditModal from "@/components/expenseGroups/ExpenseGroupEditModal";
+import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
+
+  const router = useRouter();
 
   const fetcher = () =>
     fetch("/api/expenseGroups", {
@@ -61,7 +64,8 @@ export default function DashboardPage() {
   }, [searchKeyword, expenseGroups]);
 
   const handleExpenseGroupClick = (id: string) => {
-    // redirect to expense group page
+    // redirect to expense group transactions page
+    router.push(`/transactions/${id}`);
   };
 
   const handleExpenseGroupDelete = (id: String) => {

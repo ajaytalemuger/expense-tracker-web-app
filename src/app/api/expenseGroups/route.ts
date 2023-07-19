@@ -20,8 +20,9 @@ export async function POST(request: Request) {
     const createdExpenseGroup = await create(expenseGroup);
 
     return NextResponse.json({ success: true, createdExpenseGroup });
+    
   } catch (error) {
-    console.log("error while creating ", error);
+    console.log("error while creating expense group", error);
     return NextResponse.json(
       { success: false },
       { status: StatusCodes.INTERNAL_SERVER_ERROR }

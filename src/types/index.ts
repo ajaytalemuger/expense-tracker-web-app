@@ -11,6 +11,22 @@ export type ExpenseGroupClient = {
     updatedAt: string,
 };
 
+export type TransactionClient = {
+    _id?: string,
+    expenseGroup: string,
+    name: string,
+    description: string,
+    amount: number,
+    type: string,
+    currency: string,
+    date: string,
+    categories: Array<string>,
+    paymentMode: string,
+    createdBy?: string,
+    createdAt?: Date,
+    updatedAt?: Date,
+};
+
 export type ExpenseGroupCardProps = {
     expenseGroupName: string,
     onSelect: MouseEventHandler<HTMLDivElement>,
@@ -55,9 +71,96 @@ export type FormatInputProps = {
     className?: string,
 };
 
+export type LabelledFormatInputProps = {
+    id: string,
+    label: string,
+    placeholder: string,
+    type: string,
+    value: any,
+    onChange: Function,
+    error?: boolean,
+    className?: string,
+    inputClassName?: string,
+    labelClassName?: string,
+    min?: number,
+};
+
+export type LabelledDropdownProps = {
+    id: string,
+    label: string,
+    options: Array<any>,
+    value: any,
+    onChange: Function,
+    error?: boolean,
+    className?: string,
+    inputClassName?: string,
+};
+
 export type ModalPopupInputProps = {
     open: boolean,
     onClose: MouseEventHandler<HTMLButtonElement>,
     headerText: string,
-    content: any
+    content: any,
+    className?: string,
 }
+
+export type TransactionListProps = {
+    transactions: Array<TransactionClient>
+    onEdit: Function,
+    onDelete: Function,
+};
+
+export type TransacationsNonSSRProps = {
+    expenseGroupId: string;
+};
+
+export type DeleteConfirmationModalProps = {
+    open: boolean,
+    onClose: MouseEventHandler<HTMLButtonElement>,
+    onDeleteClick: MouseEventHandler<HTMLButtonElement>
+};
+
+export type TransactionCreatonModalProps = {
+    open: boolean,
+    onClose: Function,
+    onCreate: Function,
+    expenseGroupId: string,
+};
+
+export type TransactionEditModalProps = {
+    open: boolean,
+    onClose: Function,
+    onEdit: Function,
+    transaction: TransactionClient,
+};
+
+export type TransactionState = {
+    name: string,
+    description: string,
+    amount: number,
+    type: string,
+    currency: string,
+    date: string,
+    categories: Array<string>,
+    paymentMode: string,
+    expenseGroup?: string,
+};
+
+export type MultipleInputSelectorProps = {
+    values: Array<string>,
+    onChange: Function,
+    label: string,
+    addNewValuePopupText: string,
+    value: any,
+    className?: string,
+    inputClassName?: string,
+    labelClassName?: string,
+};
+
+export type DateTimePickerProps = {
+    value: any,
+    label: string,
+    onChange: Function,
+    className?: string,
+    labelClassName?: string,
+};

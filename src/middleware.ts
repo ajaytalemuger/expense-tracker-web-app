@@ -6,11 +6,18 @@ import { StatusCodes } from "http-status-codes";
 
 export async function middleware(request: NextRequest) {
 
-  if (request.nextUrl.pathname.startsWith("/dashboard")) {
+  if (
+    request.nextUrl.pathname.startsWith("/dashboard") ||
+    request.nextUrl.pathname.startsWith("/transactions")
+  ) {
     return await validateUserTokenInCookies(request);
   }
 
-  if (request.nextUrl.pathname.startsWith("/api/expenseGroups")) {
+  if (
+    request.nextUrl.pathname.startsWith("/api/expenseGroups") ||
+    request.nextUrl.pathname.startsWith("/api/transactions")
+  ) {
+    console.log("middleware hit");
     return await validateBearerToken(request);
   }
 }
@@ -20,7 +27,6 @@ const validateUserTokenInCookies = async (request: NextRequest) => {
 
   try {
     if (userToken) {
-      
       const userData = await verifyToken(userToken);
 
       if (!userData) {
@@ -32,10 +38,9 @@ const validateUserTokenInCookies = async (request: NextRequest) => {
 
       return NextResponse.next({
         request: {
-          headers: requestHeaders
-        }
+          headers: requestHeaders,
+        },
       });
-
     } else {
       throw new Error("user token not found");
     }
@@ -43,17 +48,14 @@ const validateUserTokenInCookies = async (request: NextRequest) => {
     console.log("Error while authenticating user", error);
     return NextResponse.redirect(new URL("/login", request.url));
   }
-
 };
 
 const validateBearerToken = async (request: NextRequest) => {
-
   const authorizationHeaderParts = request.headers
     .get("Authorization")
     ?.split(" ");
 
   try {
-
     // check if bearer token exists in request header and validate it
     if (
       authorizationHeaderParts &&
@@ -72,10 +74,9 @@ const validateBearerToken = async (request: NextRequest) => {
 
       return NextResponse.next({
         request: {
-          headers: requestHeaders
-        }
+          headers: requestHeaders,
+        },
       });
-
     } else {
       throw new Error("invalid bearer token");
     }
@@ -86,13 +87,15 @@ const validateBearerToken = async (request: NextRequest) => {
       { status: StatusCodes.FORBIDDEN }
     );
   }
-
 };
 
 export const config = {
   matcher: [
-    "/dashboard", 
+    "/dashboard",
     "/api/expenseGroups/",
-    "/api/expenseGroups/:expenseGroupId*"
+    "/api/expenseGroups/:expenseGroupId*",
+    "/api/transactions",
+    "/transactions/:expenseGroupId*",
+    "/api/transactions/:transactionId*",
   ],
 };

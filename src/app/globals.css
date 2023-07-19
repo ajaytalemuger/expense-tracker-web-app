@@ -1,5 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import "react-datetime-picker/dist/DateTimePicker.css";
+@import "react-calendar/dist/Calendar.css";
+@import "react-clock/dist/Clock.css";
+
+/* react date time picker component styling changes */
+.react-datetime-picker, .react-datetime-picker__wrapper {
+    border-radius: 5px;
+}
+
+.react-datetime-picker__clear-button {
+    display: none;
+}

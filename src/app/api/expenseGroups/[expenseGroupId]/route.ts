@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { StatusCodes } from "http-status-codes";
 import { getById, updateById } from "@/db/DALs/expenseGroupsDAL";
+import { getResourceId } from "@/utils/serverUtils";
 
 export async function PUT(request: NextRequest) {
   try {
 
     // check for expense group id in request
-    const expenseGroupId = getExpenseGroupId(request);
+    const expenseGroupId = getResourceId(request);
     if (!expenseGroupId) {
       return NextResponse.json(
         { success: false, errorMsg: "expense group id not provided" },
@@ -52,16 +53,10 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ success: true, updatedExpenseGroup });
 
   } catch (error) {
-    console.log("error while creating ", error);
+    console.log("error while updating expense group ", error);
     return NextResponse.json(
       { success: false },
       { status: StatusCodes.INTERNAL_SERVER_ERROR }
     );
   }
 }
-
-const getExpenseGroupId = (request: NextRequest) => {
-  const pathName = request.nextUrl.pathname;
-  const pathNameParts = pathName.split("/");
-  return pathNameParts[pathNameParts.length - 1];
-};
