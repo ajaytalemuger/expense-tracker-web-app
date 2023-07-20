@@ -9,6 +9,7 @@ export type ExpenseGroupClient = {
     createdBy: string,
     createdAt: string,
     updatedAt: string,
+    totalTransactionAmount?: number,
 };
 
 export type TransactionClient = {
@@ -28,7 +29,7 @@ export type TransactionClient = {
 };
 
 export type ExpenseGroupCardProps = {
-    expenseGroupName: string,
+    expenseGroup: ExpenseGroupClient,
     onSelect: MouseEventHandler<HTMLDivElement>,
     onEdit: MouseEventHandler<HTMLButtonElement>,
     onDelete: MouseEventHandler<HTMLButtonElement>,
@@ -163,4 +164,18 @@ export type DateTimePickerProps = {
     onChange: Function,
     className?: string,
     labelClassName?: string,
+};
+
+export type Transaction = {
+    expenseGroup: string,
+    name: string,
+    description: string,
+    amount: number,
+    type: string,
+    currency: string,
+    date: Date,
+    category: Array<string>,
+    paymentMode: string,
+    createBy: string,
+    updatedBy?: string,
 };

@@ -1,23 +1,35 @@
 "use client";
 
+import { useMemo } from "react";
 import { ExpenseGroupCardProps } from "@/types";
 
 export default function ExpenseGroupCard({
-  expenseGroupName,
+  expenseGroup,
   onSelect,
   onEdit,
   onDelete,
   disableEdit,
   disableDelete,
 }: ExpenseGroupCardProps) {
+
+  const totalAmountTextStyle = useMemo(() => {
+    let totalAmountTextStyle = "";
+    if (expenseGroup.totalTransactionAmount !== undefined) {
+      totalAmountTextStyle = expenseGroup.totalTransactionAmount < 0 ? "text-red-500" : "text-green-500"
+    }
+    return totalAmountTextStyle;
+  }, [expenseGroup]);
+
   return (
     <div className="w-72">
       <div
         className="max-w-sm rounded-t overflow-hidden drop-shadow-md bg-[#e8f1fd] p-5 cursor-pointer"
         onClick={onSelect}
       >
-        <div className="font-bold text-xl">{expenseGroupName}</div>
-        <div className="mt-4">Total Expense:</div>
+        <div className="font-bold text-xl">{expenseGroup.name}</div>
+        <div className="mt-4">Total Expense: 
+          <span className={`ml-4 ${totalAmountTextStyle}`}>{expenseGroup.totalTransactionAmount}</span>
+        </div>
       </div>
       <div className="flex flex-row">
         <button

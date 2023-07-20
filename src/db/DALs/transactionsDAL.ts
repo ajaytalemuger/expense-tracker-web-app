@@ -43,3 +43,9 @@ export const updateById = async (transactionId: string, transaction: Transaction
     await dbConnect();
     return Transactions.findOneAndUpdate({ _id: transactionId }, { ...transaction }, { returnDocument: "after" });
 };
+
+export const getByMultipleExpenseGroups = async (expenseGroupIds: Array<string>) => {
+    await dbConnect();
+    const expenseGroupMongoIds = expenseGroupIds.map((expenseGroupId) => new Types.ObjectId(expenseGroupId));
+    return Transactions.find({ expenseGroup: { $in: expenseGroupMongoIds }});
+};

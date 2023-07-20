@@ -129,7 +129,7 @@ export default function DashboardPage() {
             {displayExpenseGroups.map((expenseGroup) => (
               <ExpenseGroupCard
                 key={expenseGroup._id}
-                expenseGroupName={expenseGroup.name}
+                expenseGroup={expenseGroup}
                 onSelect={() => handleExpenseGroupClick(expenseGroup._id)}
                 onEdit={() => handleEditExpenseGroupClick(expenseGroup._id)}
                 onDelete={() => handleExpenseGroupDelete(expenseGroup._id)}
