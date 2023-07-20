@@ -25,6 +25,7 @@ export default function DateTimePicker({
             value={value}
             onChange={handleDateTimeChange}
             disableClock={true}
+            format="dd/MM/yyyy h:mm a"
         />
     </div>
   );
