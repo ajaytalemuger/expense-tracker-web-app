@@ -17,7 +17,6 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/api/expenseGroups") ||
     request.nextUrl.pathname.startsWith("/api/transactions")
   ) {
-    console.log("middleware hit");
     return await validateBearerToken(request);
   }
 }
