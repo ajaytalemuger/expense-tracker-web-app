@@ -137,10 +137,10 @@ export default function TransactionCreationModal({
                   type="number"
                   label="Amount"
                   id="amount"
-                  placeholder="Amount"
+                  placeholder=""
                   value={state.amount}
                   onChange={(value: number) => onInputChange("amount", value)}
-                  inputClassName="w-[80px]"
+                  inputClassName="w-[70px]"
                 />
                 <LabelledDropdown
                   label="Currency"
