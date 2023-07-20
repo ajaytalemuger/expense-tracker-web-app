@@ -5,3 +5,8 @@ export const getResourceId = (request: NextRequest) => {
   const pathNameParts = pathName.split("/");
   return pathNameParts[pathNameParts.length - 1];
 };
+
+export const getUserData = (request: NextRequest) => {
+  const userDataString = request.headers.get("userData");
+  return userDataString ? JSON.parse(userDataString) : {};
+};

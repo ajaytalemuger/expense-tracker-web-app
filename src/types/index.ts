@@ -118,7 +118,8 @@ export type TransacationsNonSSRProps = {
 export type DeleteConfirmationModalProps = {
     open: boolean,
     onClose: MouseEventHandler<HTMLButtonElement>,
-    onDeleteClick: MouseEventHandler<HTMLButtonElement>
+    onDeleteClick: MouseEventHandler<HTMLButtonElement>,
+    className?: string,
 };
 
 export type TransactionCreatonModalProps = {

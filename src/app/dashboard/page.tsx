@@ -11,6 +11,7 @@ import ExpenseGroupCreationModal from "@/components/expenseGroups/ExpenseGroupCr
 import Loader from "@/components/common/Loader";
 import ExpenseGroupEditModal from "@/components/expenseGroups/ExpenseGroupEditModal";
 import { useRouter } from "next/navigation";
+import DeleteConfirmationModal from "@/components/common/DeleteConfirmationModal";
 
 export default function DashboardPage() {
 
@@ -32,7 +33,7 @@ export default function DashboardPage() {
         }
       });
 
-  const { data: expenseGroups, isLoading, mutate } = useSWR(
+  const { data: expenseGroups, isLoading: expenseGroupLoading, mutate } = useSWR(
     "/api/expenseGroups",
     fetcher,
     {
@@ -50,7 +51,11 @@ export default function DashboardPage() {
 
   const [openCreationModal, setOpenCreationModal] = useState<boolean>(false);
 
-  const [expenseGroupToEdit, setExpenseGroupToEdit] = useState<string>();
+  const [expenseGroupToEdit, setExpenseGroupToEdit] = useState<string>("");
+
+  const [expenseGroupToDelete, setExpenseGroupToDelete] = useState<string>("");
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // update display expense groups based on search keyword
   useEffect(() => {
@@ -68,8 +73,37 @@ export default function DashboardPage() {
     router.push(`/transactions/${id}`);
   };
 
-  const handleExpenseGroupDelete = (id: String) => {
-    // open delete confirmation modal
+  const handleExpenseGroupDelete = async (expenseGroupId: string) => {
+    const deleteResp = await deleteExpenseGroup(expenseGroupId);
+
+    if (deleteResp.success) {
+        setExpenseGroupToDelete("");
+
+        const updatedExpenseGroups = expenseGroups.filter((expenseGroup: any) => expenseGroup !== expenseGroupId);
+
+      mutate(updatedExpenseGroups);
+    }
+  };
+
+  const deleteExpenseGroup = async (expenseGroupId: string) => {
+    setIsLoading(true);
+
+    try {
+      const resp = await fetch(`/api/expenseGroups/${expenseGroupId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${getCookie(COOKIE_KEY)}`,
+        },
+      });
+
+      const respData = await resp.json();
+      return respData;
+    } catch (error) {
+      console.log("Error while deleting expense group ", error);
+      return { success: false };
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleAddExpenseGroupClick = () => {
@@ -105,7 +139,7 @@ export default function DashboardPage() {
 
   return (
     <>
-      {isLoading && <Loader text="Loading..."/>}
+      {(expenseGroupLoading || isLoading) && <Loader text="Loading..."/>}
       <div className="ml-10">
         <div className="flex flex-row gap-10 p-5 items-center">
           <button
@@ -132,7 +166,7 @@ export default function DashboardPage() {
                 expenseGroup={expenseGroup}
                 onSelect={() => handleExpenseGroupClick(expenseGroup._id)}
                 onEdit={() => handleEditExpenseGroupClick(expenseGroup._id)}
-                onDelete={() => handleExpenseGroupDelete(expenseGroup._id)}
+                onDelete={() => setExpenseGroupToDelete(expenseGroup._id)}
                 disableEdit={expenseGroup.admin !== userData.userId}
                 disableDelete={expenseGroup.admin !== userData.userId}
               />
@@ -150,6 +184,12 @@ export default function DashboardPage() {
         onClose={() => setExpenseGroupToEdit("")}
         onEdit={handleExpenseGroupEdit}
         expenseGroup={expenseGroupUnderEdit}
+      />
+      <DeleteConfirmationModal
+        open={!!expenseGroupToDelete}
+        onClose={() => setExpenseGroupToDelete("")}
+        onDeleteClick={() => handleExpenseGroupDelete(expenseGroupToDelete)}
+        className="top-[50%]"
       />
     </>
   );

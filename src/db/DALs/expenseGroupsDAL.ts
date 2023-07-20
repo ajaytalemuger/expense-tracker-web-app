@@ -43,4 +43,9 @@ export const getById = async (expenseGroupId: string) => {
 export const updateById = async (expenseGroupId: string, expenseGroup: ExpenseGroup) => {
     await dbConnect();
     return ExpenseGroups.findOneAndUpdate({ _id: expenseGroupId }, { ...expenseGroup }, { returnDocument: "after" });
-}
+};
+
+export const deleteById = async (expenseGroupId: string) => {
+    await dbConnect();
+    return ExpenseGroups.deleteOne({ _id: expenseGroupId });
+};

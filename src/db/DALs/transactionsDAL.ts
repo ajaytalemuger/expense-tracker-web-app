@@ -49,3 +49,8 @@ export const getByMultipleExpenseGroups = async (expenseGroupIds: Array<string>)
     const expenseGroupMongoIds = expenseGroupIds.map((expenseGroupId) => new Types.ObjectId(expenseGroupId));
     return Transactions.find({ expenseGroup: { $in: expenseGroupMongoIds }});
 };
+
+export const deleteByExpenseGroupId = async (expenseGroupId: string) => {
+    await dbConnect();
+    return Transactions.deleteMany({ expenseGroup: new Types.ObjectId(expenseGroupId) });
+};
