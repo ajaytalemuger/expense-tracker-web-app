@@ -41,7 +41,7 @@ export default function Navbar() {
         {/* <Link href="/settings" className="mt-1">
           <Image src={settingsIcon} alt="Settings" />
         </Link> */}
-        <button className="mt-1" onClick={onLogout} title="Logout">
+        <button className="mt-1 mr-[20px]" onClick={onLogout} title="Logout">
           <Image src={logoutIcon} alt="Logout" />
         </button>
       </div>
