@@ -1,13 +1,13 @@
 import { hashPassword } from "@/utils/authPwd";
 import dbConnect from "../dbConnect";
 import Users from "../models/users";
+import { User } from "@/types";
 
-type User = {
-    name: String,
-    email: String,
-    pwd: String,
-}
-
+/**
+ * Creates a new user
+ * @param user 
+ * @returns newly created user doc
+ */
 export const create = async (user: User) => {
     await dbConnect();
     const hashedPwd = await hashPassword(user.pwd);
@@ -16,6 +16,11 @@ export const create = async (user: User) => {
     return createdUser;
 };
 
+/**
+ * Get the user matching the given email id
+ * @param email 
+ * @returns user doc
+ */
 export const getByEmail = async (email: string) => {
     await dbConnect();
     return Users.findOne({ email });

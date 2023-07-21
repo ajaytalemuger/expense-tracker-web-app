@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { StatusCodes } from "http-status-codes";
-import { getResourceId } from "@/utils/serverUtils";
+import { getResourceId, getUserData } from "@/utils/serverUtils";
 import { deleteById, getById, updateById } from "@/db/DALs/transactionsDAL";
 
 const EDITABLE_TRANSACTION_FIELD = [
@@ -133,9 +133,4 @@ const validateUserIdWithTransaction = async (request: NextRequest, transaction: 
   }
 
   return userHasAccess;
-};
-
-const getUserData = (request: NextRequest) => {
-  const userDataString = request.headers.get("userData");
-  return userDataString ? JSON.parse(userDataString) : {};
 };

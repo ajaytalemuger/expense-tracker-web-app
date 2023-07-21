@@ -180,3 +180,18 @@ export type Transaction = {
     createBy: string,
     updatedBy?: string,
 };
+
+export type ExpenseGroup = {
+    admin: string,
+    name: string,
+    description: string,
+    otherUsers: Array<string>,
+    createdBy?: string,
+    updatedBy?: string,
+};
+
+export type User = {
+    name: String,
+    email: String,
+    pwd: String,
+};
