@@ -119,7 +119,7 @@ export default function TransactionsNonSSR({
           />
         );
       } else {
-        return <div>No transactions are added yet</div>;
+        return <div className="text-center">No transactions are added yet</div>;
       }
     }
   };
