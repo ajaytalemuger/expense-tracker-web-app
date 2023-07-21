@@ -77,6 +77,7 @@ export default function ExpenseGroupCreationModal({
       open={open}
       onClose={onClose}
       headerText="Create Expense Group"
+      className="mt-[-200px] ml-[-278px]"
       content={
         <div className="mt-7">
           <form>

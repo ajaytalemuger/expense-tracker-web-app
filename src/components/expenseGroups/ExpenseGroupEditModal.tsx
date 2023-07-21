@@ -89,6 +89,7 @@ export default function ExpenseGroupEditModal({
       open={open}
       onClose={onClose}
       headerText="Edit Expense Group"
+      className="mt-[-200px] ml-[-278px]"
       content={
         <div className="mt-7">
           <form>

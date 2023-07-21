@@ -3,15 +3,15 @@ import Image from "next/image";
 export default function Loader({ text = "" }) {
   return (
     <>
-      <div className="absolute w-full h-[100vh] top-0 bg-[#414040] z-30 opacity-30"></div>
+      <div className="absolute w-full h-[100vh] top-0 bg-[#414040] z-30 opacity-40"></div>
       <Image
         src="/gifs/loading.gif"
         alt=""
         width={75}
         height={190}
-        className="absolute top-[45vh] left-[46vw] z-40"
+        className="absolute top-[45vh] left-[46vw] z-50"
       />
-      <p className="absolute top-[54vh] left-[46vw] z-40">{text}</p>
+      <p className="absolute top-[54vh] left-[46vw] z-50">{text}</p>
     </>
   );
 }

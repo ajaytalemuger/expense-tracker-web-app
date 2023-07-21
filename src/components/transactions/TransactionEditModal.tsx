@@ -93,7 +93,7 @@ export default function TransactionEditModal({
         open={open}
         onClose={() => onClose()}
         headerText="Create Expense Group"
-        className="h-[595px] top-[50%] w-[525px]"
+        className="h-[595px] w-[525px] mt-[-300px] ml-[-278px]"
         content={
           <div className="mt-7">
             <form>

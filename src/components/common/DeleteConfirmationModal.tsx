@@ -14,7 +14,7 @@ export default function DeleteConfirmationModal({
       open={open}
       onClose={onClose}
       headerText="Confirm Delete"
-      className={`${twMerge("h-[150px] w-[430px]", className ? className : "")}`}
+      className={`${twMerge("h-[150px] w-[430px] mt-[-160px] ml-[-245px]", className ? className : "")}`}
       content={
         <div className="mt-7">
           Are you sure you want to delete ?

@@ -189,7 +189,7 @@ export default function DashboardPage() {
         open={!!expenseGroupToDelete}
         onClose={() => setExpenseGroupToDelete("")}
         onDeleteClick={() => handleExpenseGroupDelete(expenseGroupToDelete)}
-        className="top-[50%]"
+        // className="top-[50%]"
       />
     </>
   );
