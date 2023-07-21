@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { ExpenseGroupCardProps } from "@/types";
+import { truncateText } from "@/utils/clientUtils";
 
 export default function ExpenseGroupCard({
   expenseGroup,
@@ -15,7 +16,10 @@ export default function ExpenseGroupCard({
   const totalAmountTextStyle = useMemo(() => {
     let totalAmountTextStyle = "";
     if (expenseGroup.totalTransactionAmount !== undefined) {
-      totalAmountTextStyle = expenseGroup.totalTransactionAmount < 0 ? "text-red-500" : "text-green-500"
+      totalAmountTextStyle =
+        expenseGroup.totalTransactionAmount < 0
+          ? "text-red-500"
+          : "text-green-500";
     }
     return totalAmountTextStyle;
   }, [expenseGroup]);
@@ -26,9 +30,14 @@ export default function ExpenseGroupCard({
         className="max-w-sm rounded-t overflow-hidden drop-shadow-md bg-[#e8f1fd] p-5 cursor-pointer"
         onClick={onSelect}
       >
-        <div className="font-bold text-xl">{expenseGroup.name}</div>
-        <div className="mt-4">Total Expense: 
-          <span className={`ml-4 ${totalAmountTextStyle}`}>{expenseGroup.totalTransactionAmount}</span>
+        <div className="h-[56px] leading-[56px] overflow-hidden">
+          <span className="font-bold text-xl align-middle inline-block leading-normal">{truncateText(expenseGroup.name)}</span>
+        </div>
+        <div className="mt-4">
+          Total Expense:
+          <span className={`ml-4 ${totalAmountTextStyle}`}>
+            {expenseGroup.totalTransactionAmount}
+          </span>
         </div>
       </div>
       <div className="flex flex-row">
