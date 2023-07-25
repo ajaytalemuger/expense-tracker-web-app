@@ -6,7 +6,7 @@ if (!MONGODB_URI) {
   throw new Error("Mongo db uri is not provided");
 }
 
-let cached = global.mongoose;
+var cached = global.mongoose;
 
 if (!cached) {
   cached = global.mongoose = { conn: null, promise: null };
@@ -24,7 +24,9 @@ async function dbConnect() {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+    const mongoUrl = MONGODB_URI || "";
+
+    cached.promise = mongoose.connect(mongoUrl, opts).then((mongoose) => {
       return mongoose;
     });
   }

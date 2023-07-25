@@ -1,9 +1,11 @@
+import { ButtonProps } from "@/types";
+
 export default function Button({
   children,
   className,
   onClick,
   disabled = false,
-}) {
+}: ButtonProps) {
   return (
     <button
       onClick={onClick}

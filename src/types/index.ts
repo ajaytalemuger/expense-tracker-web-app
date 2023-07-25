@@ -195,3 +195,10 @@ export type User = {
     email: String,
     pwd: String,
 };
+
+export type ButtonProps = {
+    children: any,
+    className: string,
+    onClick: MouseEventHandler<HTMLButtonElement>,
+    disabled?: boolean,
+};

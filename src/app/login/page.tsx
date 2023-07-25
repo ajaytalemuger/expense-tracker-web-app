@@ -114,7 +114,7 @@ export default function LoginPage() {
   };
 
   const disableConfirmBtn = useMemo(() => {
-    return !(state.email.trim().length && state.password.trim());
+    return !(state.email.trim() && state.password.trim());
   }, [state]);
 
   const divHeightValue = useMemo(() => {
